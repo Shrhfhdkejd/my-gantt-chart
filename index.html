@@ -3,52 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的專案進度</title>
+    <title>WMS 專案甘特圖與任務細項</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
-        body { 
-            font-family: sans-serif; 
-            padding: 20px; 
-            max-width: 1000px; 
-            margin: auto; 
-            background-color: #f9f9f9;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        h1 { text-align: center; color: #333; }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .instructions {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
         .gantt-container {
-            background-color: white;
+            background: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        /* 任務細項面板樣式 */
+        #detail-panel {
+            display: none; /* 預設隱藏 */
+            margin-top: 30px;
+            background: #ffffff;
+            border-left: 5px solid #3498db;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        #detail-panel h2 {
+            margin-top: 0;
+            color: #2980b9;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        #detail-list {
+            padding-left: 20px;
+        }
+        #detail-list li {
+            margin-bottom: 10px;
+        }
+        .checkbox {
+            color: #bdc3c7;
+            margin-right: 8px;
+            font-family: monospace;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <h1>專案進度甘特圖</h1>
+    <h1>WMS 棧板入庫指派優化系統</h1>
+    <p class="instructions">💡 互動說明：請點擊下方甘特圖中的「任務區塊」，下方即可展開該階段的詳細開發清單。</p>
 
     <div class="gantt-container">
         <div class="mermaid">
-        gantt
-            title 2026 專案時程表
-            dateFormat  YYYY-MM-DD
-            
-            section 規劃與籌備
-            需求分析           :a1, 2026-04-05, 7d
-            系統架構設計       :after a1, 10d
-            
-            section 執行階段
-            前端介面開發       :2026-04-20, 15d
-            後端資料庫建置     :2026-04-22, 15d
-            
-            section 測試與上線
-            系統整合測試       :2026-05-07, 7d
-            正式發布上線       :2026-05-14, 2d
+            gantt
+                title 專案時程表 (3/30 - 5/31)
+                dateFormat  YYYY-MM-DD
+                axisFormat  %m/%d
+
+                section 階段一：資料工程
+                資料介接與整併       :a1, 2026-03-30, 14d
+                click a1 call showDetails("a1")
+
+                section 階段二：系統架構
+                模型架構與邏輯定義   :a2, 2026-04-13, 14d
+                click a2 call showDetails("a2")
+
+                section 階段三：空間建模
+                空間建模與數據模擬   :a3, 2026-04-27, 14d
+                click a3 call showDetails("a3")
+
+                section 階段四：核心演算法
+                算法實作與原型開發   :a4, 2026-05-11, 14d
+                click a4 call showDetails("a4")
+
+                section 階段五：驗證落地
+                驗證與壓力測試       :a5, 2026-05-25, 7d
+                click a5 call showDetails("a5")
         </div>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'default' });
-    </script>
+    <div id="detail-panel">
+        <h2 id="detail-title">任務細項</h2>
+        <ul id="detail-list"></ul>
+    </div>
 
+    <script>
+        // 初始化 Mermaid，必須設定 securityLevel 為 loose 才能啟用 click 事件
+        mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });
+
+        // 定義各階段的向下鑽取 (Drill-down) 內容
+        const taskDetails = {
+            "a1": {
+                title: "階段一：資料介接與整併 (W1-W2)",
+                tasks: [
+                    "<b>核心任務：</b>建立標準化資料輸入流。",
+                    "實作商品 ABC 分類與 PBC（物理特性/重量）資料庫介接。",
+                    "撰寫 ETL 腳本清洗並轉換現有訂單明細。"
+                ]
+            },
+            "a2": {
+                title: "階段二：模型架構與邏輯定義 (W3-W4)",
+                tasks: [
+                    "<b>核心任務：</b>定義系統資料庫與邏輯邊界。",
+                    "建立核心 Entity：儲位主檔 (Location)、棧板明細 (Pallet)、指派日誌 (AssignmentLog)。",
+                    "設定基礎的 API 框架與 ORM 模型。"
+                ]
+            },
+            "a3": {
+                title: "階段三：空間建模與數據模擬 (W5-W6)",
+                tasks: [
+                    "<b>核心任務：</b>生成倉庫虛擬環境與動線規則。",
+                    "開發儲位 3D 座標 (XYZ) 的模擬生成器。",
+                    "實作曼哈頓距離計算函數（計算儲位至出入口的距離）。",
+                    "根據距離總和，自動劃分 A、B、C 三大黃金與一般儲位區域。"
+                ]
+            },
+            "a4": {
+                title: "階段四：算法實作與原型開發 (W7-W8)",
+                tasks: [
+                    "<b>核心任務：</b>開發指派演算法引擎。",
+                    "實作硬性約束過濾（如：棧板重量不可超過儲位荷重、排除非空儲位）。",
+                    "建立成本矩陣（計算距離分數與 ABC 類別錯置的懲罰權重）。",
+                    "導入線性指派演算法（Linear Assignment Solver）找出整體最優解。",
+                    "實作觸發運算與狀態更新的 API 端點。"
+                ]
+            },
+            "a5": {
+                title: "階段五：驗證與壓力測試 (W9)",
+                tasks: [
+                    "<b>核心任務：</b>系統驗收與價值量化。",
+                    "撰寫大促極端情境的模擬壓測腳本。",
+                    "實作投資回報率 (ROI) 與「節省堆高機行走距離」的試算邏輯與報表輸出。"
+                ]
+            }
+        };
+
+        // 綁定給 Mermaid 點擊事件的全域函數
+        window.showDetails = function(taskId) {
+            const data = taskDetails[taskId];
+            if (data) {
+                // 顯示面板
+                const panel = document.getElementById('detail-panel');
+                panel.style.display = 'block';
+                
+                // 更新標題
+                document.getElementById('detail-title').innerText = data.title;
+                
+                // 更新清單
+                const ul = document.getElementById('detail-list');
+                ul.innerHTML = '';
+                data.tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    // 第一項是核心任務，不做成 Checkbox；其餘做成待辦清單樣式
+                    if (index === 0) {
+                        li.innerHTML = task;
+                        li.style.marginBottom = "15px";
+                        li.style.listStyleType = "none";
+                        li.style.marginLeft = "-20px";
+                    } else {
+                        li.innerHTML = `<span class="checkbox">[ ]</span> ${task}`;
+                        li.style.listStyleType = "none";
+                    }
+                    ul.appendChild(li);
+                });
+
+                // 平滑滾動到面板位置
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        };
+    </script>
 </body>
 </html>
