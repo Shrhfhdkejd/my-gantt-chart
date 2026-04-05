@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WMS 專案甘特圖與任務細項</title>
+    <title>WMS 專案甘特圖與具體工作細項</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         body {
@@ -31,9 +31,8 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             overflow-x: auto;
         }
-        /* 任務細項面板樣式 */
         #detail-panel {
-            display: none; /* 預設隱藏 */
+            display: none;
             margin-top: 30px;
             background: #ffffff;
             border-left: 5px solid #3498db;
@@ -48,16 +47,28 @@
             border-bottom: 1px solid #ecf0f1;
             padding-bottom: 10px;
         }
+        .task-group-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
         #detail-list {
-            padding-left: 20px;
+            padding-left: 0;
         }
         #detail-list li {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            list-style-type: none;
+            padding-left: 25px;
+            position: relative;
         }
-        .checkbox {
+        #detail-list li::before {
+            content: "[ ]";
+            position: absolute;
+            left: 0;
             color: #bdc3c7;
-            margin-right: 8px;
             font-family: monospace;
+            font-weight: bold;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
@@ -68,12 +79,12 @@
 <body>
 
     <h1>WMS 棧板入庫指派優化系統</h1>
-    <p class="instructions">💡 互動說明：請點擊下方甘特圖中的「任務區塊」，下方即可展開該階段的詳細開發清單。</p>
+    <p class="instructions">💡 互動說明：請點擊下方甘特圖中的「任務區塊」，查看該階段的具體開發工作項目。</p>
 
     <div class="gantt-container">
         <div class="mermaid">
             gantt
-                title 專案時程表 (3/30 - 5/31)
+                title 專案時程表與開發模組 (3/30 - 5/31)
                 dateFormat  YYYY-MM-DD
                 axisFormat  %m/%d
 
@@ -100,91 +111,139 @@
     </div>
 
     <div id="detail-panel">
-        <h2 id="detail-title">任務細項</h2>
-        <ul id="detail-list"></ul>
+        <h2 id="detail-title">選擇的階段</h2>
+        <div id="detail-content"></div>
     </div>
 
     <script>
-        // 初始化 Mermaid，必須設定 securityLevel 為 loose 才能啟用 click 事件
         mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });
 
-        // 定義各階段的向下鑽取 (Drill-down) 內容
         const taskDetails = {
             "a1": {
                 title: "階段一：資料介接與整併 (W1-W2)",
                 tasks: [
-                    "<b>核心任務：</b>建立標準化資料輸入流。",
-                    "實作商品 ABC 分類與 PBC（物理特性/重量）資料庫介接。",
-                    "撰寫 ETL 腳本清洗並轉換現有訂單明細。"
+                    {
+                        group: "資料庫與環境準備",
+                        items: [
+                            "建立專案 Git 倉儲與基礎目錄結構 (如 FastAPI 或 Express 框架)。",
+                            "配置環境變數 (.env) 與資料庫連線字串 (PostgreSQL/MySQL)。"
+                        ]
+                    },
+                    {
+                        group: "ETL 資料清洗開發",
+                        items: [
+                            "撰寫 Python 腳本串接既有之 ABC 分類主檔。",
+                            "實作 PBC 資料轉換邏輯 (將不同包裝單位的商品統一轉換為「約當棧板數」與「總重量」)。",
+                            "開發資料匯入 API `POST /api/data/sync-master`，並處理防呆與缺漏值。"
+                        ]
+                    }
                 ]
             },
             "a2": {
                 title: "階段二：模型架構與邏輯定義 (W3-W4)",
                 tasks: [
-                    "<b>核心任務：</b>定義系統資料庫與邏輯邊界。",
-                    "建立核心 Entity：儲位主檔 (Location)、棧板明細 (Pallet)、指派日誌 (AssignmentLog)。",
-                    "設定基礎的 API 框架與 ORM 模型。"
+                    {
+                        group: "ORM 模型設計與 Migration",
+                        items: [
+                            "建立 `Location` Schema (欄位包含: id, x, y, z, zone_class, max_weight, is_empty)。",
+                            "建立 `Pallet` Schema (欄位包含: id, abc_class, pbc_weight, status)。",
+                            "建立 `AssignmentLog` Schema 用於記錄演算法算出的配對結果與分數。",
+                            "生成並執行 Database Migration 腳本 (如 Alembic 或 Prisma Migrate)。"
+                        ]
+                    },
+                    {
+                        group: "基礎 API 開發",
+                        items: [
+                            "實作 `GET /api/locations` 取得儲位清單與狀態。",
+                            "實作 `POST /api/pallets` 接收單筆或批次待入庫的棧板資料。",
+                            "設計標準化的 API Response 格式 (JSON) 與全域錯誤處理 Middleware。"
+                        ]
+                    }
                 ]
             },
             "a3": {
                 title: "階段三：空間建模與數據模擬 (W5-W6)",
                 tasks: [
-                    "<b>核心任務：</b>生成倉庫虛擬環境與動線規則。",
-                    "開發儲位 3D 座標 (XYZ) 的模擬生成器。",
-                    "實作曼哈頓距離計算函數（計算儲位至出入口的距離）。",
-                    "根據距離總和，自動劃分 A、B、C 三大黃金與一般儲位區域。"
+                    {
+                        group: "虛擬倉庫生成器",
+                        items: [
+                            "撰寫生成腳本，動態建立 3D 陣列的儲位座標 (例如: 5 排 x 10 欄 x 4 層)。",
+                            "實作 `calc_manhattan_distance(x, y, z)` 函數，計算所有儲位至出入口 (0,0,0) 的距離。"
+                        ]
+                    },
+                    {
+                        group: "儲位區域自動劃分邏輯",
+                        items: [
+                            "撰寫演算法將儲位依距離遠近排序。",
+                            "將距離最短的前 20% 儲位標記為 `zone_class = 'A'` (黃金儲位)。",
+                            "將接續的 30% 標記為 `zone_class = 'B'`，其餘標記為 `zone_class = 'C'`。",
+                            "開發 `POST /api/warehouse/init-mock` 端點，一鍵生成測試倉庫寫入資料庫。"
+                        ]
+                    }
                 ]
             },
             "a4": {
-                title: "階段四：算法實作與原型開發 (W7-W8)",
+                title: "階段四：核心演算法與原型開發 (W7-W8)",
                 tasks: [
-                    "<b>核心任務：</b>開發指派演算法引擎。",
-                    "實作硬性約束過濾（如：棧板重量不可超過儲位荷重、排除非空儲位）。",
-                    "建立成本矩陣（計算距離分數與 ABC 類別錯置的懲罰權重）。",
-                    "導入線性指派演算法（Linear Assignment Solver）找出整體最優解。",
-                    "實作觸發運算與狀態更新的 API 端點。"
+                    {
+                        group: "指派演算法引擎 (Assignment Engine)",
+                        items: [
+                            "實作 Hard Constraints 過濾器：排除 `is_empty == false` 及 `棧板重量 > 儲位荷重` 的配對。",
+                            "實作成本矩陣 (Cost Matrix) 計算：分數 = 曼哈頓距離 × ABC 錯置懲罰權重 (Penalty)。",
+                            "定義懲罰權重規則 (例如: A類棧板放C類儲位懲罰 x100，C類佔用A類懲罰 x50)。",
+                            "整合 `scipy.optimize.linear_sum_assignment` (匈牙利演算法) 求解最低總成本的配對。"
+                        ]
+                    },
+                    {
+                        group: "狀態更新與調用 API",
+                        items: [
+                            "開發 `POST /api/assignments/run` 端點來觸發上述演算法引擎。",
+                            "將演算法得出的最佳解寫入 `AssignmentLog`。",
+                            "利用 Transaction (事務) 同步更新 `Location` 狀態 (設為非空) 與 `Pallet` 狀態 (設為已指派)。"
+                        ]
+                    }
                 ]
             },
             "a5": {
                 title: "階段五：驗證與壓力測試 (W9)",
                 tasks: [
-                    "<b>核心任務：</b>系統驗收與價值量化。",
-                    "撰寫大促極端情境的模擬壓測腳本。",
-                    "實作投資回報率 (ROI) 與「節省堆高機行走距離」的試算邏輯與報表輸出。"
+                    {
+                        group: "壓力測試腳本開發",
+                        items: [
+                            "撰寫 Mock 腳本，模擬「大促期間」瞬間湧入 500 個待入庫棧板的請求。",
+                            "監控 API 回應時間，確保演算法能在 2 秒內完成 500x1000 矩陣的運算。"
+                        ]
+                    },
+                    {
+                        group: "ROI 試算與報表產出",
+                        items: [
+                            "實作對照組演算法 (Random/Greedy 隨機指派)，計算與優化演算法的「總行走距離」差異。",
+                            "開發 `GET /api/reports/roi` 端點，輸出節省的距離百分比與 ABC 儲位符合率。",
+                            "整理測試數據，產出給管理層的空間優化成效報告。"
+                        ]
+                    }
                 ]
             }
         };
 
-        // 綁定給 Mermaid 點擊事件的全域函數
         window.showDetails = function(taskId) {
             const data = taskDetails[taskId];
             if (data) {
-                // 顯示面板
                 const panel = document.getElementById('detail-panel');
                 panel.style.display = 'block';
-                
-                // 更新標題
                 document.getElementById('detail-title').innerText = data.title;
                 
-                // 更新清單
-                const ul = document.getElementById('detail-list');
-                ul.innerHTML = '';
-                data.tasks.forEach((task, index) => {
-                    const li = document.createElement('li');
-                    // 第一項是核心任務，不做成 Checkbox；其餘做成待辦清單樣式
-                    if (index === 0) {
-                        li.innerHTML = task;
-                        li.style.marginBottom = "15px";
-                        li.style.listStyleType = "none";
-                        li.style.marginLeft = "-20px";
-                    } else {
-                        li.innerHTML = `<span class="checkbox">[ ]</span> ${task}`;
-                        li.style.listStyleType = "none";
-                    }
-                    ul.appendChild(li);
+                let contentHtml = '';
+                data.tasks.forEach(group => {
+                    contentHtml += `<div class="task-group-title">📌 ${group.group}</div>`;
+                    contentHtml += `<ul id="detail-list">`;
+                    group.items.forEach(item => {
+                        contentHtml += `<li>${item}</li>`;
+                    });
+                    contentHtml += `</ul>`;
                 });
-
-                // 平滑滾動到面板位置
+                
+                document.getElementById('detail-content').innerHTML = contentHtml;
                 panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         };
