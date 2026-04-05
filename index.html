@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的專案進度</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            padding: 20px; 
+            max-width: 1000px; 
+            margin: auto; 
+            background-color: #f9f9f9;
+        }
+        h1 { text-align: center; color: #333; }
+        .gantt-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>專案進度甘特圖</h1>
+
+    <div class="gantt-container">
+        <div class="mermaid">
+        gantt
+            title 2026 專案時程表
+            dateFormat  YYYY-MM-DD
+            
+            section 規劃與籌備
+            需求分析           :a1, 2026-04-05, 7d
+            系統架構設計       :after a1, 10d
+            
+            section 執行階段
+            前端介面開發       :2026-04-20, 15d
+            後端資料庫建置     :2026-04-22, 15d
+            
+            section 測試與上線
+            系統整合測試       :2026-05-07, 7d
+            正式發布上線       :2026-05-14, 2d
+        </div>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+
+</body>
+</html>
