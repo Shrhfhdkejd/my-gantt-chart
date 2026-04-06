@@ -3,250 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WMS 專案甘特圖與具體工作細項</title>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <title>WMS 棧板入庫指派優化系統 - 開發進度 [cite: 1]</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
+        body { 
+            font-family: sans-serif; 
+            padding: 20px; 
+            max-width: 1200px; 
+            margin: auto; 
+            background-color: #f4f6f9;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .instructions {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-        }
+        h1 { text-align: center; color: #333; }
         .gantt-container {
-            background: #fff;
+            background-color: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        #detail-panel {
-            display: none;
-            margin-top: 30px;
-            background: #ffffff;
-            border-left: 5px solid #3498db;
-            padding: 20px 30px;
+        details {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: fadeIn 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        #detail-panel h2 {
-            margin-top: 0;
-            color: #2980b9;
-            border-bottom: 1px solid #ecf0f1;
-            padding-bottom: 10px;
-        }
-        .task-group-title {
+        summary {
+            font-size: 18px;
             font-weight: bold;
-            color: #2c3e50;
-            margin-top: 15px;
-            margin-bottom: 5px;
+            cursor: pointer;
+            padding: 10px 0;
+            color: #0056b3;
+            outline: none;
         }
-        #detail-list {
-            padding-left: 0;
-        }
-        #detail-list li {
-            margin-bottom: 8px;
-            list-style-type: none;
-            padding-left: 25px;
-            position: relative;
-        }
-        #detail-list li::before {
-            content: "[ ]";
-            position: absolute;
-            left: 0;
-            color: #bdc3c7;
-            font-family: monospace;
-            font-weight: bold;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        summary:hover {
+            color: #003d82;
         }
     </style>
 </head>
 <body>
 
-    <h1>WMS 棧板入庫指派優化系統</h1>
-    <p class="instructions">💡 互動說明：請點擊下方甘特圖中的「任務區塊」，查看該階段的具體開發工作項目。</p>
+    <h1>WMS 棧板入庫指派優化系統 - 專案時程表 [cite: 1]</h1>
 
-    <div class="gantt-container">
-        <div class="mermaid">
+    <details open>
+        <summary>📊 每週高階進度 (預設顯示)</summary>
+        <div class="gantt-container">
+            <div class="mermaid">
             gantt
-                title 專案時程表與開發模組 (3/30 - 5/31)
+                title 專案里程碑與階段目標
                 dateFormat  YYYY-MM-DD
-                axisFormat  %m/%d
+                tickInterval 1week
+                axisFormat %m/%d
 
-                section 階段一：資料工程
-                資料介接與整併       :a1, 2026-03-30, 14d
-                click a1 call showDetails("a1")
+                section 階段一 [cite: 2]
+                資料介接與整併 (W1-W2)[cite: 3]: 2026-03-30, 12d
 
-                section 階段二：系統架構
-                模型架構與邏輯定義   :a2, 2026-04-13, 14d
-                click a2 call showDetails("a2")
+                section 階段二 [cite: 29]
+                模型架構與邏輯定義 (W3-W4)[cite: 30]: 2026-04-13, 12d
 
-                section 階段三：空間建模
-                空間建模與數據模擬   :a3, 2026-04-27, 14d
-                click a3 call showDetails("a3")
+                section 階段三 [cite: 52]
+                空間建模與數據模擬 (W5-W6)[cite: 53]: 2026-04-27, 12d
 
-                section 階段四：核心演算法
-                算法實作與原型開發   :a4, 2026-05-11, 14d
-                click a4 call showDetails("a4")
+                section 階段四 [cite: 74]
+                核心演算法與原型開發 (W7-W8)[cite: 75]: 2026-05-11, 12d
 
-                section 階段五：驗證落地
-                驗證與壓力測試       :a5, 2026-05-25, 7d
-                click a5 call showDetails("a5")
+                section 階段五 [cite: 96]
+                驗證落地與壓力測試 (W9)[cite: 97]: 2026-05-25, 5d
+            </div>
         </div>
-    </div>
+    </details>
 
-    <div id="detail-panel">
-        <h2 id="detail-title">選擇的階段</h2>
-        <div id="detail-content"></div>
-    </div>
+    <details>
+        <summary>🔍 點此展開：每日詳細開發清單 (Day 1 ~ Day 45)</summary>
+        <div class="gantt-container">
+            <div class="mermaid">
+            gantt
+                title 每日開發規劃清單 [cite: 1]
+                dateFormat  YYYY-MM-DD
+                tickInterval 1week
+                axisFormat %m/%d
 
-    <script>
-        mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });
+                section 階段一：資料介接 [cite: 2]
+                Day 1: 專案啟動與環境建置[cite: 4]: 2026-03-30, 1d
+                Day 2: 資料庫連線與模型試作[cite: 8]: 2026-03-31, 1d
+                Day 3: 外部資料源規格盤點[cite: 11]: 2026-04-01, 1d
+                Day 4: 主檔介接腳本開發[cite: 14]: 2026-04-02, 1d
+                Day 5: PBC 轉換邏輯實作[cite: 16]: 2026-04-03, 1d
+                Day 6: 訂單明細清洗 (ETL)[cite: 18]: 2026-04-06, 1d
+                Day 7: 資料匯入 API 開發[cite: 21]: 2026-04-07, 1d
+                Day 8: 防呆與例外處理[cite: 23]: 2026-04-08, 1d
+                Day 9: 單元測試撰寫[cite: 25]: 2026-04-09, 1d
+                Day 10: 階段整合與盤點[cite: 27]: 2026-04-10, 1d
 
-        const taskDetails = {
-            "a1": {
-                title: "階段一：資料介接與整併 (W1-W2)",
-                tasks: [
-                    {
-                        group: "資料庫與環境準備",
-                        items: [
-                            "建立專案 Git 倉儲與基礎目錄結構 (如 FastAPI 或 Express 框架)。",
-                            "配置環境變數 (.env) 與資料庫連線字串 (PostgreSQL/MySQL)。"
-                        ]
-                    },
-                    {
-                        group: "ETL 資料清洗開發",
-                        items: [
-                            "撰寫 Python 腳本串接既有之 ABC 分類主檔。",
-                            "實作 PBC 資料轉換邏輯 (將不同包裝單位的商品統一轉換為「約當棧板數」與「總重量」)。",
-                            "開發資料匯入 API `POST /api/data/sync-master`，並處理防呆與缺漏值。"
-                        ]
-                    }
-                ]
-            },
-            "a2": {
-                title: "階段二：模型架構與邏輯定義 (W3-W4)",
-                tasks: [
-                    {
-                        group: "ORM 模型設計與 Migration",
-                        items: [
-                            "建立 `Location` Schema (欄位包含: id, x, y, z, zone_class, max_weight, is_empty)。",
-                            "建立 `Pallet` Schema (欄位包含: id, abc_class, pbc_weight, status)。",
-                            "建立 `AssignmentLog` Schema 用於記錄演算法算出的配對結果與分數。",
-                            "生成並執行 Database Migration 腳本 (如 Alembic 或 Prisma Migrate)。"
-                        ]
-                    },
-                    {
-                        group: "基礎 API 開發",
-                        items: [
-                            "實作 `GET /api/locations` 取得儲位清單與狀態。",
-                            "實作 `POST /api/pallets` 接收單筆或批次待入庫的棧板資料。",
-                            "設計標準化的 API Response 格式 (JSON) 與全域錯誤處理 Middleware。"
-                        ]
-                    }
-                ]
-            },
-            "a3": {
-                title: "階段三：空間建模與數據模擬 (W5-W6)",
-                tasks: [
-                    {
-                        group: "虛擬倉庫生成器",
-                        items: [
-                            "撰寫生成腳本，動態建立 3D 陣列的儲位座標 (例如: 5 排 x 10 欄 x 4 層)。",
-                            "實作 `calc_manhattan_distance(x, y, z)` 函數，計算所有儲位至出入口 (0,0,0) 的距離。"
-                        ]
-                    },
-                    {
-                        group: "儲位區域自動劃分邏輯",
-                        items: [
-                            "撰寫演算法將儲位依距離遠近排序。",
-                            "將距離最短的前 20% 儲位標記為 `zone_class = 'A'` (黃金儲位)。",
-                            "將接續的 30% 標記為 `zone_class = 'B'`，其餘標記為 `zone_class = 'C'`。",
-                            "開發 `POST /api/warehouse/init-mock` 端點，一鍵生成測試倉庫寫入資料庫。"
-                        ]
-                    }
-                ]
-            },
-            "a4": {
-                title: "階段四：核心演算法與原型開發 (W7-W8)",
-                tasks: [
-                    {
-                        group: "指派演算法引擎 (Assignment Engine)",
-                        items: [
-                            "實作 Hard Constraints 過濾器：排除 `is_empty == false` 及 `棧板重量 > 儲位荷重` 的配對。",
-                            "實作成本矩陣 (Cost Matrix) 計算：分數 = 曼哈頓距離 × ABC 錯置懲罰權重 (Penalty)。",
-                            "定義懲罰權重規則 (例如: A類棧板放C類儲位懲罰 x100，C類佔用A類懲罰 x50)。",
-                            "整合 `scipy.optimize.linear_sum_assignment` (匈牙利演算法) 求解最低總成本的配對。"
-                        ]
-                    },
-                    {
-                        group: "狀態更新與調用 API",
-                        items: [
-                            "開發 `POST /api/assignments/run` 端點來觸發上述演算法引擎。",
-                            "將演算法得出的最佳解寫入 `AssignmentLog`。",
-                            "利用 Transaction (事務) 同步更新 `Location` 狀態 (設為非空) 與 `Pallet` 狀態 (設為已指派)。"
-                        ]
-                    }
-                ]
-            },
-            "a5": {
-                title: "階段五：驗證與壓力測試 (W9)",
-                tasks: [
-                    {
-                        group: "壓力測試腳本開發",
-                        items: [
-                            "撰寫 Mock 腳本，模擬「大促期間」瞬間湧入 500 個待入庫棧板的請求。",
-                            "監控 API 回應時間，確保演算法能在 2 秒內完成 500x1000 矩陣的運算。"
-                        ]
-                    },
-                    {
-                        group: "ROI 試算與報表產出",
-                        items: [
-                            "實作對照組演算法 (Random/Greedy 隨機指派)，計算與優化演算法的「總行走距離」差異。",
-                            "開發 `GET /api/reports/roi` 端點，輸出節省的距離百分比與 ABC 儲位符合率。",
-                            "整理測試數據，產出給管理層的空間優化成效報告。"
-                        ]
-                    }
-                ]
-            }
-        };
+                section 階段二：模型與 API [cite: 29]
+                Day 11: 實作儲位資料表[cite: 31]: 2026-04-13, 1d
+                Day 12: 實作棧板資料表[cite: 33]: 2026-04-14, 1d
+                Day 13: 實作指派日誌資料表[cite: 35]: 2026-04-15, 1d
+                Day 14: 資料庫遷移[cite: 37]: 2026-04-16, 1d
+                Day 15: API 錯誤處理中介層[cite: 39]: 2026-04-17, 1d
+                Day 16: 儲位查詢 API 開發[cite: 42]: 2026-04-20, 1d
+                Day 17: 棧板寫入 API 開發[cite: 44]: 2026-04-21, 1d
+                Day 18: 棧板狀態查詢 API[cite: 46]: 2026-04-22, 1d
+                Day 19: API 整合測試[cite: 48]: 2026-04-23, 1d
+                Day 20: 階段盤點與除錯[cite: 50]: 2026-04-24, 1d
 
-        window.showDetails = function(taskId) {
-            const data = taskDetails[taskId];
-            if (data) {
-                const panel = document.getElementById('detail-panel');
-                panel.style.display = 'block';
-                document.getElementById('detail-title').innerText = data.title;
-                
-                let contentHtml = '';
-                data.tasks.forEach(group => {
-                    contentHtml += `<div class="task-group-title">📌 ${group.group}</div>`;
-                    contentHtml += `<ul id="detail-list">`;
-                    group.items.forEach(item => {
-                        contentHtml += `<li>${item}</li>`;
-                    });
-                    contentHtml += `</ul>`;
-                });
-                
-                document.getElementById('detail-content').innerHTML = contentHtml;
-                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        };
+                section 階段三：空間與模擬 [cite: 52]
+                Day 21: 3D 陣列生成器開發[cite: 54]: 2026-04-27, 1d
+                Day 22: 距離運算函數實作[cite: 56]: 2026-04-28, 1d
+                Day 23: 距離資料綁定[cite: 58]: 2026-04-29, 1d
+                Day 24: 儲位排序演算法[cite: 60]: 2026-04-30, 1d
+                Day 25: 儲位分級邏輯[cite: 62]: 2026-05-01, 1d
+                Day 26: 模擬資料初始化 API[cite: 64]: 2026-05-04, 1d
+                Day 27: 資料庫批次寫入實作[cite: 66]: 2026-05-05, 1d
+                Day 28: 驗證工具開發[cite: 68]: 2026-05-06, 1d
+                Day 29: 邊界值測試[cite: 70]: 2026-05-07, 1d
+                Day 30: 測試環境完備確認[cite: 72]: 2026-05-08, 1d
+
+                section 階段四：核心演算法 [cite: 74]
+                Day 31: 演算法引擎框架搭建[cite: 76]: 2026-05-11, 1d
+                Day 32: 硬性約束-空位檢核[cite: 78]: 2026-05-12, 1d
+                Day 33: 硬性約束-荷重檢核[cite: 80]: 2026-05-13, 1d
+                Day 34: 成本矩陣基礎建置[cite: 82]: 2026-05-14, 1d
+                Day 35: ABC 錯置懲罰實作[cite: 84]: 2026-05-15, 1d
+                Day 36: 導入線性指派求解器[cite: 86]: 2026-05-18, 1d
+                Day 37: 最佳解資料解析[cite: 88]: 2026-05-19, 1d
+                Day 38: 觸發演算法 API 開發[cite: 90]: 2026-05-20, 1d
+                Day 39: 資料庫事務處理[cite: 92]: 2026-05-21, 1d
+                Day 40: 小規模驗證[cite: 94]: 2026-05-22, 1d
+
+                section 階段五：驗證與壓測 [cite: 96]
+                Day 41: 大促情境壓測腳本開發[cite: 98]: 2026-05-25, 1d
+                Day 42: 效能調優[cite: 100]: 2026-05-26, 1d
+                Day 43: 對照組演算法實作[cite: 102]: 2026-05-27, 1d
+                Day 44: ROI 與報表 API 開發[cite: 104]: 2026-05-28, 1d
+                Day 45: 專案交付與結案[cite: 106]: 2026-05-29, 1d
+            </div>
+        </div>
+    </details>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
     </script>
+
 </body>
 </html>
