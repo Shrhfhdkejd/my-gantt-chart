@@ -3,147 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WMS 棧板入庫指派優化系統 - 開發進度 [cite: 1]</title>
+    <title>WMS 棧板入庫指派優化系統 - 甘特圖</title>
+    <link href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css" rel="stylesheet">
+    <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
     <style>
-        body { 
-            font-family: sans-serif; 
-            padding: 20px; 
-            max-width: 1200px; 
-            margin: auto; 
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
             background-color: #f4f6f9;
         }
-        h1 { text-align: center; color: #333; }
-        .gantt-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
+        h2 {
+            text-align: center;
+            color: #333;
+            margin: 15px 0;
+        }
+        /* 設定甘特圖容器的大小 */
+        #gantt_here {
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        details {
-            margin-bottom: 20px;
-            background: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        summary {
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 0;
-            color: #0056b3;
-            outline: none;
-        }
-        summary:hover {
-            color: #003d82;
         }
     </style>
 </head>
 <body>
 
-    <h1>WMS 棧板入庫指派優化系統 - 專案時程表 [cite: 1]</h1>
+    <h2>WMS 棧板入庫指派優化系統 - 開發進度</h2>
+    <div id="gantt_here"></div>
 
-    <details open>
-        <summary>📊 每週高階進度 (預設顯示)</summary>
-        <div class="gantt-container">
-            <div class="mermaid">
-            gantt
-                title 專案里程碑與階段目標
-                dateFormat  YYYY-MM-DD
-                tickInterval 1week
-                axisFormat %m/%d
+    <script>
+        // 設定日期格式
+        gantt.config.xml_date = "%Y-%m-%d";
+        
+        // 隱藏六日 (不計入工作天)
+        gantt.config.work_time = true;
+        gantt.config.skip_off_time = true;
 
-                section 階段一 [cite: 2]
-                資料介接與整併 (W1-W2)[cite: 3]: 2026-03-30, 12d
+        // 設定右側時間軸的顯示刻度 (上層顯示月/週，下層顯示日)
+        gantt.config.scales = [
+            {unit: "month", step: 1, format: "%Y年 %M"},
+            {unit: "day", step: 1, format: "%m/%d"}
+        ];
 
-                section 階段二 [cite: 29]
-                模型架構與邏輯定義 (W3-W4)[cite: 30]: 2026-04-13, 12d
+        // 設定左側清單的欄位
+        gantt.config.columns = [
+            {name: "text", label: "任務名稱", width: 250, tree: true},
+            {name: "start_date", label: "開始時間", align: "center", width: 90},
+            {name: "duration", label: "天數", align: "center", width: 50}
+        ];
 
-                section 階段三 [cite: 52]
-                空間建模與數據模擬 (W5-W6)[cite: 53]: 2026-04-27, 12d
+        // 初始化甘特圖
+        gantt.init("gantt_here");
 
-                section 階段四 [cite: 74]
-                核心演算法與原型開發 (W7-W8)[cite: 75]: 2026-05-11, 12d
+        // 載入您的 45 天專案資料
+        // open: false 代表預設為「收合」狀態；type: "project" 代表這是一個群組母任務
+        const projectData = {
+            data: [
+                // === Week 1 ===
+                { id: "w1", text: "Week 1: 專案啟動與主檔介接", start_date: "2026-03-30", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "1", parent: "w1", text: "Day 1: 專案啟動與環境建置", start_date: "2026-03-30", duration: 1 },
+                { id: "2", parent: "w1", text: "Day 2: 資料庫連線與模型試作", start_date: "2026-03-31", duration: 1 },
+                { id: "3", parent: "w1", text: "Day 3: 外部資料源規格盤點", start_date: "2026-04-01", duration: 1 },
+                { id: "4", parent: "w1", text: "Day 4: 主檔介接腳本開發", start_date: "2026-04-02", duration: 1 },
+                { id: "5", parent: "w1", text: "Day 5: PBC 轉換邏輯實作", start_date: "2026-04-03", duration: 1 },
 
-                section 階段五 [cite: 96]
-                驗證落地與壓力測試 (W9)[cite: 97]: 2026-05-25, 5d
-            </div>
-        </div>
-    </details>
+                // === Week 2 ===
+                { id: "w2", text: "Week 2: 資料介接與整併", start_date: "2026-04-06", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "6", parent: "w2", text: "Day 6: 訂單明細清洗 (ETL)", start_date: "2026-04-06", duration: 1 },
+                { id: "7", parent: "w2", text: "Day 7: 資料匯入 API 開發", start_date: "2026-04-07", duration: 1 },
+                { id: "8", parent: "w2", text: "Day 8: 防呆與例外處理", start_date: "2026-04-08", duration: 1 },
+                { id: "9", parent: "w2", text: "Day 9: 單元測試撰寫", start_date: "2026-04-09", duration: 1 },
+                { id: "10", parent: "w2", text: "Day 10: 階段整合與盤點", start_date: "2026-04-10", duration: 1 },
 
-    <details>
-        <summary>🔍 點此展開：每日詳細開發清單 (Day 1 ~ Day 45)</summary>
-        <div class="gantt-container">
-            <div class="mermaid">
-            gantt
-                title 每日開發規劃清單 [cite: 1]
-                dateFormat  YYYY-MM-DD
-                tickInterval 1week
-                axisFormat %m/%d
+                // === Week 3 ===
+                { id: "w3", text: "Week 3: 模型與基礎 API", start_date: "2026-04-13", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "11", parent: "w3", text: "Day 11: 實作儲位資料表", start_date: "2026-04-13", duration: 1 },
+                { id: "12", parent: "w3", text: "Day 12: 實作棧板資料表", start_date: "2026-04-14", duration: 1 },
+                { id: "13", parent: "w3", text: "Day 13: 實作指派日誌資料表", start_date: "2026-04-15", duration: 1 },
+                { id: "14", parent: "w3", text: "Day 14: 資料庫遷移", start_date: "2026-04-16", duration: 1 },
+                { id: "15", parent: "w3", text: "Day 15: API 錯誤處理中介層", start_date: "2026-04-17", duration: 1 },
 
-                section 階段一：資料介接 [cite: 2]
-                Day 1: 專案啟動與環境建置[cite: 4]: 2026-03-30, 1d
-                Day 2: 資料庫連線與模型試作[cite: 8]: 2026-03-31, 1d
-                Day 3: 外部資料源規格盤點[cite: 11]: 2026-04-01, 1d
-                Day 4: 主檔介接腳本開發[cite: 14]: 2026-04-02, 1d
-                Day 5: PBC 轉換邏輯實作[cite: 16]: 2026-04-03, 1d
-                Day 6: 訂單明細清洗 (ETL)[cite: 18]: 2026-04-06, 1d
-                Day 7: 資料匯入 API 開發[cite: 21]: 2026-04-07, 1d
-                Day 8: 防呆與例外處理[cite: 23]: 2026-04-08, 1d
-                Day 9: 單元測試撰寫[cite: 25]: 2026-04-09, 1d
-                Day 10: 階段整合與盤點[cite: 27]: 2026-04-10, 1d
+                // === Week 4 ===
+                { id: "w4", text: "Week 4: API 開發與測試", start_date: "2026-04-20", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "16", parent: "w4", text: "Day 16: 儲位查詢 API 開發", start_date: "2026-04-20", duration: 1 },
+                { id: "17", parent: "w4", text: "Day 17: 棧板寫入 API 開發", start_date: "2026-04-21", duration: 1 },
+                { id: "18", parent: "w4", text: "Day 18: 棧板狀態查詢 API", start_date: "2026-04-22", duration: 1 },
+                { id: "19", parent: "w4", text: "Day 19: API 整合測試", start_date: "2026-04-23", duration: 1 },
+                { id: "20", parent: "w4", text: "Day 20: 階段盤點與除錯", start_date: "2026-04-24", duration: 1 },
 
-                section 階段二：模型與 API [cite: 29]
-                Day 11: 實作儲位資料表[cite: 31]: 2026-04-13, 1d
-                Day 12: 實作棧板資料表[cite: 33]: 2026-04-14, 1d
-                Day 13: 實作指派日誌資料表[cite: 35]: 2026-04-15, 1d
-                Day 14: 資料庫遷移[cite: 37]: 2026-04-16, 1d
-                Day 15: API 錯誤處理中介層[cite: 39]: 2026-04-17, 1d
-                Day 16: 儲位查詢 API 開發[cite: 42]: 2026-04-20, 1d
-                Day 17: 棧板寫入 API 開發[cite: 44]: 2026-04-21, 1d
-                Day 18: 棧板狀態查詢 API[cite: 46]: 2026-04-22, 1d
-                Day 19: API 整合測試[cite: 48]: 2026-04-23, 1d
-                Day 20: 階段盤點與除錯[cite: 50]: 2026-04-24, 1d
+                // === Week 5 ===
+                { id: "w5", text: "Week 5: 空間建模與數據模擬", start_date: "2026-04-27", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "21", parent: "w5", text: "Day 21: 3D 陣列生成器開發", start_date: "2026-04-27", duration: 1 },
+                { id: "22", parent: "w5", text: "Day 22: 距離運算函數實作", start_date: "2026-04-28", duration: 1 },
+                { id: "23", parent: "w5", text: "Day 23: 距離資料綁定", start_date: "2026-04-29", duration: 1 },
+                { id: "24", parent: "w5", text: "Day 24: 儲位排序演算法", start_date: "2026-04-30", duration: 1 },
+                { id: "25", parent: "w5", text: "Day 25: 儲位分級邏輯", start_date: "2026-05-01", duration: 1 },
 
-                section 階段三：空間與模擬 [cite: 52]
-                Day 21: 3D 陣列生成器開發[cite: 54]: 2026-04-27, 1d
-                Day 22: 距離運算函數實作[cite: 56]: 2026-04-28, 1d
-                Day 23: 距離資料綁定[cite: 58]: 2026-04-29, 1d
-                Day 24: 儲位排序演算法[cite: 60]: 2026-04-30, 1d
-                Day 25: 儲位分級邏輯[cite: 62]: 2026-05-01, 1d
-                Day 26: 模擬資料初始化 API[cite: 64]: 2026-05-04, 1d
-                Day 27: 資料庫批次寫入實作[cite: 66]: 2026-05-05, 1d
-                Day 28: 驗證工具開發[cite: 68]: 2026-05-06, 1d
-                Day 29: 邊界值測試[cite: 70]: 2026-05-07, 1d
-                Day 30: 測試環境完備確認[cite: 72]: 2026-05-08, 1d
+                // === Week 6 ===
+                { id: "w6", text: "Week 6: 模擬資料與驗證", start_date: "2026-05-04", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "26", parent: "w6", text: "Day 26: 模擬資料初始化 API", start_date: "2026-05-04", duration: 1 },
+                { id: "27", parent: "w6", text: "Day 27: 資料庫批次寫入實作", start_date: "2026-05-05", duration: 1 },
+                { id: "28", parent: "w6", text: "Day 28: 驗證工具開發", start_date: "2026-05-06", duration: 1 },
+                { id: "29", parent: "w6", text: "Day 29: 邊界值測試", start_date: "2026-05-07", duration: 1 },
+                { id: "30", parent: "w6", text: "Day 30: 測試環境完備確認", start_date: "2026-05-08", duration: 1 },
 
-                section 階段四：核心演算法 [cite: 74]
-                Day 31: 演算法引擎框架搭建[cite: 76]: 2026-05-11, 1d
-                Day 32: 硬性約束-空位檢核[cite: 78]: 2026-05-12, 1d
-                Day 33: 硬性約束-荷重檢核[cite: 80]: 2026-05-13, 1d
-                Day 34: 成本矩陣基礎建置[cite: 82]: 2026-05-14, 1d
-                Day 35: ABC 錯置懲罰實作[cite: 84]: 2026-05-15, 1d
-                Day 36: 導入線性指派求解器[cite: 86]: 2026-05-18, 1d
-                Day 37: 最佳解資料解析[cite: 88]: 2026-05-19, 1d
-                Day 38: 觸發演算法 API 開發[cite: 90]: 2026-05-20, 1d
-                Day 39: 資料庫事務處理[cite: 92]: 2026-05-21, 1d
-                Day 40: 小規模驗證[cite: 94]: 2026-05-22, 1d
+                // === Week 7 ===
+                { id: "w7", text: "Week 7: 核心演算法建置", start_date: "2026-05-11", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "31", parent: "w7", text: "Day 31: 演算法引擎框架搭建", start_date: "2026-05-11", duration: 1 },
+                { id: "32", parent: "w7", text: "Day 32: 硬性約束-空位檢核", start_date: "2026-05-12", duration: 1 },
+                { id: "33", parent: "w7", text: "Day 33: 硬性約束-荷重檢核", start_date: "2026-05-13", duration: 1 },
+                { id: "34", parent: "w7", text: "Day 34: 成本矩陣基礎建置", start_date: "2026-05-14", duration: 1 },
+                { id: "35", parent: "w7", text: "Day 35: ABC 錯置懲罰實作", start_date: "2026-05-15", duration: 1 },
 
-                section 階段五：驗證與壓測 [cite: 96]
-                Day 41: 大促情境壓測腳本開發[cite: 98]: 2026-05-25, 1d
-                Day 42: 效能調優[cite: 100]: 2026-05-26, 1d
-                Day 43: 對照組演算法實作[cite: 102]: 2026-05-27, 1d
-                Day 44: ROI 與報表 API 開發[cite: 104]: 2026-05-28, 1d
-                Day 45: 專案交付與結案[cite: 106]: 2026-05-29, 1d
-            </div>
-        </div>
-    </details>
+                // === Week 8 ===
+                { id: "w8", text: "Week 8: 演算法最佳化與整合", start_date: "2026-05-18", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "36", parent: "w8", text: "Day 36: 導入線性指派求解器", start_date: "2026-05-18", duration: 1 },
+                { id: "37", parent: "w8", text: "Day 37: 最佳解資料解析", start_date: "2026-05-19", duration: 1 },
+                { id: "38", parent: "w8", text: "Day 38: 觸發演算法 API 開發", start_date: "2026-05-20", duration: 1 },
+                { id: "39", parent: "w8", text: "Day 39: 資料庫事務處理", start_date: "2026-05-21", duration: 1 },
+                { id: "40", parent: "w8", text: "Day 40: 小規模驗證", start_date: "2026-05-22", duration: 1 },
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+                // === Week 9 ===
+                { id: "w9", text: "Week 9: 驗證、壓測與交付", start_date: "2026-05-25", duration: 5, open: false, type: gantt.config.types.project },
+                { id: "41", parent: "w9", text: "Day 41: 大促情境壓測腳本開發", start_date: "2026-05-25", duration: 1 },
+                { id: "42", parent: "w9", text: "Day 42: 效能調優", start_date: "2026-05-26", duration: 1 },
+                { id: "43", parent: "w9", text: "Day 43: 對照組演算法實作", start_date: "2026-05-27", duration: 1 },
+                { id: "44", parent: "w9", text: "Day 44: ROI 與報表 API 開發", start_date: "2026-05-28", duration: 1 },
+                { id: "45", parent: "w9", text: "Day 45: 專案交付與結案", start_date: "2026-05-29", duration: 1 }
+            ]
+        };
+
+        // 渲染甘特圖
+        gantt.parse(projectData);
     </script>
-
 </body>
 </html>
