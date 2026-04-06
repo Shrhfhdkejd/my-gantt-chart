@@ -64,7 +64,20 @@
             {name: "start_date", label: "開始時間", align: "center", width: 90},
             {name: "duration", label: "天數", align: "center", width: 50}
         ];
-
+        gantt.plugins({
+            marker: true
+        });
+        
+        // 自動抓取今天的日期與時間
+        const today = new Date(); 
+        
+        // 在甘特圖上新增一條「今天」的標記線
+        gantt.addMarker({
+            start_date: today,
+            css: "today-marker",
+            text: "今天",
+            title: "今天是: " + today.toLocaleDateString()
+        });
         // 初始化甘特圖
         gantt.init("gantt_here");
 
